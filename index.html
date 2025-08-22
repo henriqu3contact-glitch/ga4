@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Site com 1 Botão</title>
 
   <!-- Google Tag Manager -->
@@ -10,42 +11,116 @@
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-N3PV72FZ'); 
+  })(window,document,'script','dataLayer','GTM-N3PV72FZ');
   </script>
   <!-- End Google Tag Manager -->
 
   <style>
+    :root {
+      --bg: #0f172a;       /* fundo escuro */
+      --card: #111827;     /* cartão */
+      --text: #e5e7eb;     /* texto */
+      --brand: #3b82f6;    /* azul */
+      --brand-hover: #2563eb;
+    }
+    * { box-sizing: border-box; }
     body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(60rem 60rem at 50% -10%, #1f2937, var(--bg));
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+    }
+    .card {
+      width: min(92vw, 520px);
+      background: var(--card);
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      text-align: center;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: 1.6rem;
+      line-height: 1.2;
+      letter-spacing: .2px;
+    }
+    p { margin: 0 0 20px; opacity: .9; }
+    #botaoPrincipal {
+      appearance: none;
+      -webkit-appearance: none;
+      display: inline-flex;
       align-items: center;
-      height: 100vh;
-      background: #f5f5f5;
-    }
-    button {
-      padding: 15px 30px;
-      font-size: 18px;
-      background: #007bff;
-      border: none;
-      border-radius: 6px;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 22px;
+      width: 100%;
+      max-width: 320px;
+      font-size: 1rem;
+      line-height: 1;
+      font-weight: 600;
       color: white;
+      background: var(--brand);
+      border: none;
+      border-radius: 12px;
       cursor: pointer;
+      user-select: none;
+      outline: none;
+      transition: transform .04s ease, background .15s ease;
     }
-    button:hover {
-      background: #0056b3;
+    #botaoPrincipal:hover { background: var(--brand-hover); }
+    #botaoPrincipal:active { transform: translateY(1px); }
+    #status {
+      margin-top: 14px;
+      font-size: .9rem;
+      opacity: .8;
     }
   </style>
 </head>
-
 <body>
   <!-- Google Tag Manager (noscript) -->
   <noscript>
     <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N3PV72FZ"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+            height="0" width="0" style="display:none;visibility:hidden"></iframe>
   </noscript>
   <!-- End Google Tag Manager (noscript) -->
 
-  <button id="botaoPrincipal">Clique Aqui</button>
+  <main class="card" role="main">
+    <h1>Bem-vindo</h1>
+    <p>Este site tem apenas um botão para teste de mensuração.</p>
+
+    <!-- Botão rastreável -->
+    <button id="botaoPrincipal" type="button" tabindex="0" aria-label="Clique aqui">
+      Clique aqui
+    </button>
+
+    <!-- Mensagem visual só pra confirmar que o clique ocorreu -->
+    <div id="status" aria-live="polite"></div>
+  </main>
+
+  <!-- Fallback: empurra um evento no dataLayer ao clicar -->
+  <script>
+    (function () {
+      window.dataLayer = window.dataLayer || [];
+      var btn = document.getElementById('botaoPrincipal');
+      var status = document.getElementById('status');
+      if (!btn) return;
+
+      btn.addEventListener('click', function () {
+        // Evento manual para debug no Preview do GTM
+        window.dataLayer.push({
+          event: 'botao_clicado_manual',
+          element_id: 'botaoPrincipal',
+          element_text: 'Clique aqui'
+        });
+        // feedback visual
+        var t = new Date().toLocaleTimeString();
+        status.textContent = 'Clique detectado (' + t + ')';
+      }, { passive: true });
+    }());
+  </script>
 </body>
 </html>
